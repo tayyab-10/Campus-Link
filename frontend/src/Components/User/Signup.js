@@ -1,29 +1,87 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import SchoolIcon from '@mui/icons-material/School';
 import { Button, Form, Input, Checkbox } from 'antd';
-import {Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import bgImage from "../../Assets/Images/bg1.jpg";
 import { GoogleOutlined } from '@ant-design/icons';
-
+import { useDispatch, useSelector } from "react-redux";
+import { clearError, LoadUser, SignupUser } from '../../Actions/userActions';
+import {useAlert} from "react-alert"
+import Loader from "../Loader/Loader"
 
 const Signup = () => {
-    
-    const [avatarPreview, setAvatarPreview] = useState("/Profile.png");
-  
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const alert=useAlert();
 
+    const [agree, setAgree] = useState(false);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [university, setUniversity] = useState("");
+    const [avatar, setAvatar] = useState("");
+    const [avatarPreview, setAvatarPreview] = useState("/Profile.png");
+
+    const { error, loading, isAuthenticated } = useSelector(
+        (state) => state.User
+    );
+
+    const handleSignUp = async () => {
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('university', university);
+        formData.append('avatar', avatar); 
+        dispatch(SignupUser(formData));
+    };
+    useEffect(() => {
+        if (error) {
+          alert.error(error);
+          dispatch(clearError());
+        }
+    
+        if (isAuthenticated) {
+            dispatch(LoadUser())
+            alert.success("Sign up Successfully")
+            navigate("/account")
+        }
+      }, [dispatch, error, alert,isAuthenticated,navigate]);
     
 
     const onFinish = () => {
-        // handleSignUp();
+        handleSignUp();
     };
 
     const onAgreeChange = (e) => {
-        // setAgree(e.target.checked);
+        setAgree(e.target.checked);
+    };
+
+    const handleAvatarChange = (e) => {
+        const file = e.target.files[0];
+    
+        if (file) {
+            setAvatar(file);
+    
+            // For displaying the preview, you can use FileReader
+            const reader = new FileReader();
+            reader.onload = () => {
+                if (reader.readyState === 2) {
+                    setAvatarPreview(reader.result);
+                }
+            };
+            reader.readAsDataURL(file);
+        } else {
+            console.log("No file selected");
+        }
     };
     
 
     return (
       <>
+      {loading ? (<Loader/>) :
+      (
         <div
         style={{ backgroundImage: `url(${bgImage})` }}
         className="flex items-center justify-center min-h-screen bg-cover bg-center p-12"
@@ -52,7 +110,7 @@ const Signup = () => {
                         prefix={<UserOutlined className="site-form-item-icon" />}
                         placeholder="Name"
                         name="name"
-                        
+                        onChange={(e) => setName(e.target.value)}
                         className="rounded-md"
                     />
                 </Form.Item>
@@ -64,7 +122,7 @@ const Signup = () => {
                         prefix={<UserOutlined className="site-form-item-icon" />}
                         placeholder="Email"
                         name="email"
-                       
+                        onChange={(e) => setEmail(e.target.value)}
                         className="rounded-md"
                     />
                 </Form.Item>
@@ -77,7 +135,20 @@ const Signup = () => {
                         type="password"
                         placeholder="Password"
                         name="password"
-                       
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="rounded-md"
+                    />
+                </Form.Item>
+                <Form.Item
+                    name="university"
+                    rules={[{ required: true, message: 'Please Enter your Unviversity!' }]}
+                >
+                    <Input
+                        prefix={<SchoolIcon className="site-form-item-icon" />}
+                        type="name"
+                        placeholder="University"
+                        name="university"
+                        onChange={(e) => setUniversity(e.target.value)}
                         className="rounded-md"
                     />
                 </Form.Item>
@@ -88,7 +159,7 @@ const Signup = () => {
                             type="file"
                             name="avatar"
                             accept="image/*"
-                          
+                            onChange={handleAvatarChange}
                             className="ml-4"
                         />
                     </div>
@@ -106,7 +177,7 @@ const Signup = () => {
                         type="primary"
                         htmlType="submit"
                         className="btn btn-primary w-full rounded-md"
-                      
+                        disabled={!agree}
                     >
                         Sign up
                     </Button>
@@ -118,7 +189,7 @@ const Signup = () => {
             </Form>
         </div>
     </div>
-    
+      )}
       </>
     );
 };
