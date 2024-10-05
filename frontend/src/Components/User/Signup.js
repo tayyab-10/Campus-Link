@@ -79,7 +79,7 @@ const Signup = () => {
 
     
     const handlegoogleSignup=()=>{
-       navigate("/auth/google")
+    //    navigate("/auth/google")
     }
 
     return (
