@@ -76,7 +76,11 @@ const Signup = () => {
             console.log("No file selected");
         }
     };
+
     
+    const handlegoogleSignup=()=>{
+       navigate("/auth/google")
+    }
 
     return (
       <>
@@ -88,7 +92,7 @@ const Signup = () => {
     >
         <div className="shadow-lg p-6 bg-white rounded-lg max-w-80 mt-8">
             <h5 className="text-center mb-4 font-normal">Create a new Notevault Account</h5>
-            <Button type="default" icon={<GoogleOutlined />} className="mb-3 w-full">
+            <Button type="default" onClick={handlegoogleSignup}icon={<GoogleOutlined />} className="mb-3 w-full">
                 Sign up with Google
             </Button>
             <div className="flex items-center justify-center text-sm text-gray-600 mb-3">
