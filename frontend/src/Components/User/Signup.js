@@ -1,197 +1,107 @@
-import React, { useState,useEffect } from 'react';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import SchoolIcon from '@mui/icons-material/School';
-import { Button, Form, Input, Checkbox } from 'antd';
-import { useNavigate, Link } from 'react-router-dom';
-import bgImage from "../../Assets/Images/bg1.jpg";
-import { GoogleOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from "react-redux";
-import { clearError, LoadUser, SignupUser } from '../../Actions/userActions';
-import {useAlert} from "react-alert"
-import Loader from "../Loader/Loader"
+import { registerInputs } from "../../Constants/constants";
+import ReusableForm from "../ReusableForm/ReusableForm";
+import { Link, useNavigate } from "react-router-dom";
+import { useAlert } from "react-alert";
+import { useEffect } from "react";
+import loginImage from "../../Assets/Images/login_image.png";
+import {
+  clearError,
+  googleSignIn,
+  LoadUser,
+  SignupUser,
+} from "../../Actions/userActions";
+import Loader from "../Loader/Loader";
+import { GoogleOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 
 const Signup = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const alert=useAlert();
+  const dispatch = useDispatch();
+  const alert = useAlert();
+  const navigate = useNavigate();
 
-    const [agree, setAgree] = useState(false);
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [university, setUniversity] = useState("");
-    const [avatar, setAvatar] = useState("");
-    const [avatarPreview, setAvatarPreview] = useState("/Profile.png");
+  const { error, loading, isAuthenticated } = useSelector(
+    (state) => state.User
+  );
 
-    const { error, loading, isAuthenticated } = useSelector(
-        (state) => state.User
-    );
+  useEffect(() => {
+    if (error) {
+      alert.error(error);
+      dispatch(clearError());
+    }
 
-    const handleSignUp = async () => {
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('email', email);
-        formData.append('password', password);
-        formData.append('university', university);
-        formData.append('avatar', avatar); 
-        dispatch(SignupUser(formData));
-    };
-    useEffect(() => {
-        if (error) {
-          alert.error(error);
-          dispatch(clearError());
-        }
-    
-        if (isAuthenticated) {
-            dispatch(LoadUser())
-            alert.success("Sign up Successfully")
-            navigate("/account")
-        }
-      }, [dispatch, error, alert,isAuthenticated,navigate]);
-    
+    if (isAuthenticated) {
+      dispatch(LoadUser());
+      alert.success("Signup Successfully");
+      navigate("/account");
+    }
+  }, [dispatch, error, alert, navigate, isAuthenticated]);
 
-    const onFinish = () => {
-        handleSignUp();
-    };
+  const handleSignUp = async (data) => {
+    const formData = new FormData();
+    formData.append("name", data?.name);
+    formData.append("email", data?.email);
+    formData.append("password", data?.password);
+    formData.append("university", data?.university);
+    formData.append("avatar", data?.avatar);
+    console.log(formData);
+    dispatch(SignupUser(formData));
+  };
+  const handleGoogleSignIn = () => {
+    dispatch(googleSignIn());
+  };
+  return (
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="flex justify-center min-h-screen p-4 bg-gray-100">
+          <div className="flex flex-col md:flex-row items-center bg-white shadow-lg rounded-lg overflow-hidden ">
+            <div className="hidden md:block w-[80%] h-full bg-blue-600">
+              <img
+                src={loginImage}
+                alt="Login"
+                className="w-full h-full object-cover"
+              />
+            </div>
 
-    const onAgreeChange = (e) => {
-        setAgree(e.target.checked);
-    };
-
-    const handleAvatarChange = (e) => {
-        const file = e.target.files[0];
-    
-        if (file) {
-            setAvatar(file);
-    
-            // For displaying the preview, you can use FileReader
-            const reader = new FileReader();
-            reader.onload = () => {
-                if (reader.readyState === 2) {
-                    setAvatarPreview(reader.result);
-                }
-            };
-            reader.readAsDataURL(file);
-        } else {
-            console.log("No file selected");
-        }
-    };
-    
-
-    return (
-      <>
-      {loading ? (<Loader/>) :
-      (
-        <div
-        style={{ backgroundImage: `url(${bgImage})` }}
-        className="flex items-center justify-center min-h-screen bg-cover bg-center p-12"
-    >
-        <div className="shadow-lg p-6 bg-white rounded-lg max-w-80 mt-8">
-            <h5 className="text-center mb-4 font-normal">Create a new Notevault Account</h5>
-            <Button type="default" icon={<GoogleOutlined />} className="mb-3 w-full">
-                Sign up with Google
-            </Button>
-            <div className="flex items-center justify-center text-sm text-gray-600 mb-3">
+            {/* Right side: Form */}
+            <div className="p-8 w-1/2 flex flex-col justify-center items-center">
+              <div className="mb-6">
+                <Button
+                  type="default"
+                  icon={<GoogleOutlined />}
+                  className="mb-3 p-6"
+                  onClick={handleGoogleSignIn}
+                >
+                  Sign up with Google
+                </Button>
+              </div>
+              <div className="flex items-center justify-center text-sm text-black mb-3">
                 <hr className="flex-1" />
                 <span className="mx-2">Or</span>
                 <hr className="flex-1" />
+              </div>
+              <ReusableForm
+                inputs={registerInputs}
+                onSubmit={handleSignUp}
+                butttonTxt="Signup"
+              />
+              <div className="text-center mt-3">
+                <span className="font-normal">Already a member?</span>
+                <Link
+                  to="/login"
+                  className="text-blue-500 hover:underline ml-1"
+                >
+                  Login here!
+                </Link>
+              </div>
             </div>
-            <Form
-                name="signup_form"
-                initialValues={{ remember: true }}
-                onFinish={onFinish}
-                encType="multipart/form-data"
-            >
-                <Form.Item
-                    name="name"
-                    rules={[{ required: true, message: 'Please input your Name!' }]}
-                >
-                    <Input
-                        prefix={<UserOutlined className="site-form-item-icon" />}
-                        placeholder="Name"
-                        name="name"
-                        onChange={(e) => setName(e.target.value)}
-                        className="rounded-md"
-                    />
-                </Form.Item>
-                <Form.Item
-                    name="email"
-                    rules={[{ required: true, message: 'Please input your Email!' }]}
-                >
-                    <Input
-                        prefix={<UserOutlined className="site-form-item-icon" />}
-                        placeholder="Email"
-                        name="email"
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="rounded-md"
-                    />
-                </Form.Item>
-                <Form.Item
-                    name="password"
-                    rules={[{ required: true, message: 'Please input your Password!' }]}
-                >
-                    <Input
-                        prefix={<LockOutlined className="site-form-item-icon" />}
-                        type="password"
-                        placeholder="Password"
-                        name="password"
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="rounded-md"
-                    />
-                </Form.Item>
-                <Form.Item
-                    name="university"
-                    rules={[{ required: true, message: 'Please Enter your Unviversity!' }]}
-                >
-                    <Input
-                        prefix={<SchoolIcon className="site-form-item-icon" />}
-                        type="name"
-                        placeholder="University"
-                        name="university"
-                        onChange={(e) => setUniversity(e.target.value)}
-                        className="rounded-md"
-                    />
-                </Form.Item>
-                <Form.Item>
-                    <div className="flex items-center justify-between">
-                        <img src={avatarPreview} alt="Avatar Preview" className="w-18 h-14 rounded-full" />
-                        <input
-                            type="file"
-                            name="avatar"
-                            accept="image/*"
-                            onChange={handleAvatarChange}
-                            className="ml-4"
-                        />
-                    </div>
-                </Form.Item>
-                <Form.Item>
-                    <Checkbox onChange={onAgreeChange} className="mb-1 text-sm text-gray-600">
-                        I agree to the terms and conditions
-                    </Checkbox>
-                    <Checkbox className="text-sm text-gray-600">
-                        Send me Tips and News.
-                    </Checkbox>
-                </Form.Item>
-                <Form.Item>
-                    <Button
-                        type="primary"
-                        htmlType="submit"
-                        className="btn btn-primary w-full rounded-md"
-                        disabled={!agree}
-                    >
-                        Sign up
-                    </Button>
-                </Form.Item>
-                <div className="text-center mt-3">
-                    <span className="font-normal">Already a member?</span>
-                    <Link to="/login" className="text-blue-500 hover:underline ml-1">Login here!</Link>
-                </div>
-            </Form>
+          </div>
         </div>
-    </div>
       )}
-      </>
-    );
+    </>
+  );
 };
 
 export default Signup;

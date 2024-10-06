@@ -1,32 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { LockOutlined, UserOutlined, GoogleOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import { clearError, LoadUser, LoginUser } from '../../Actions/userActions';
+import { loginInputs } from "../../Constants/constants";
+import ReusableForm from "../ReusableForm/ReusableForm";
+import { Link, useNavigate } from "react-router-dom";
+import { useAlert } from "react-alert";
+import { useEffect } from "react";
 import bgImage from "../../Assets/Images/bg1.jpg";
-import { useAlert } from 'react-alert';
-import Loader from '../Loader/Loader';
+import loginImage from "../../Assets/Images/login_image.png";
+import {
+  clearError,
+  googleSignIn,
+  LoadUser,
+  LoginUser,
+} from "../../Actions/userActions";
+import Loader from "../Loader/Loader";
+import { GoogleOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 
 const Login = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
   const navigate = useNavigate();
 
-  const { error, loading, isAuthenticated} = useSelector(
+  const { error, loading, isAuthenticated } = useSelector(
     (state) => state.User
   );
-
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
-  // const [redirect] = useState("/account");
-
-  // // Extract redirect path from URL query parameters
-  // useEffect(() => {
-  //   // const params = new URLSearchParams(window.location.search);
-  //   // const redirectPath = params.get('redirect') || "/account";
-  //   // setRedirect(redirectPath);
-  // }, []);
 
   useEffect(() => {
     if (error) {
@@ -35,90 +32,69 @@ const Login = () => {
     }
 
     if (isAuthenticated) {
-      dispatch(LoadUser())
-      alert.success("Login Successfully")
+      dispatch(LoadUser());
+      alert.success("Login Successfully");
       navigate("/account");
     }
   }, [dispatch, error, alert, navigate, isAuthenticated]);
 
-  const handleLogin = () => {
-    dispatch(LoginUser(loginEmail, loginPassword));
+  const handleLogin = (data) => {
+    dispatch(LoginUser(data.email, data.password));
   };
-
-  const onFinish = () => {
-    handleLogin();
+  const handleGoogleSignIn = () => {
+    dispatch(googleSignIn());
   };
-
   return (
     <>
       {loading ? (
         <Loader />
       ) : (
-        <div
-          style={{ backgroundImage: `url(${bgImage})` }}
-          className="flex items-center justify-center min-h-screen bg-cover bg-center"
-        >
-          <div className="card shadow-lg p-6 mt-4 rounded-md bg-white" style={{ maxWidth: '23rem' }}>
-            <h5 className="text-center mb-4 font-normal">Login</h5>
-            <Button type="default" icon={<GoogleOutlined />} className="ml-5 mb-3 max-w-screen-2xl">
-              Sign up with Google
-            </Button>
-            <div className="text-center flex items-center justify-center text-sm" style={{ color: "rgba(102, 102, 104,4)" }}>
-              <hr className="left-line" style={{ flex: 1 }} />
-              <span style={{ margin: "2px 8px" }}>Or</span>
-              <hr className="right-line" style={{ flex: 1 }} />
+        <div className="flex justify-center min-h-screen p-4 bg-gray-100">
+          <div className="flex flex-col md:flex-row items-center bg-white shadow-lg rounded-lg overflow-hidden ">
+            {/* Left side: Image */}
+            <div className="hidden md:block w-[80%] h-full bg-blue-600">
+              <img
+                src={loginImage}
+                alt="Login"
+                className="w-full h-full object-cover"
+              />
             </div>
-            <Form
-              name="normal_login"
-              initialValues={{ remember: true }}
-              onFinish={onFinish}
-            >
-              <Form.Item
-                name="email"
-                rules={[{ required: true, message: 'Please input your Email!' }]}
-              >
-                <Input
-                  prefix={<UserOutlined className="site-form-item-icon" />}
-                  placeholder="Email"
-                  name="email"
-                  onChange={(e) => setLoginEmail(e.target.value)}
-                />
-              </Form.Item>
-              <Form.Item
-                name="password"
-                rules={[{ required: true, message: 'Please input your Password!' }]}
-              >
-                <Input
-                  prefix={<LockOutlined className="site-form-item-icon" />}
-                  type="password"
-                  placeholder="Password"
-                  name="password"
-                  onChange={(e) => setLoginPassword(e.target.value)}
-                />
-              </Form.Item>
-              <Form.Item>
-                <div className="d-flex justify-content-between align-items-center">
-                  <Form.Item name="remember" valuePropName="checked" noStyle>
-                    <Checkbox>Remember me</Checkbox>
-                  </Form.Item>
-                  <Link className="login-form-forgot text-blue-500 hover:underline" to="/forgotpassword">
-                    Forgot password
-                  </Link>
-                </div>
-              </Form.Item>
-              <Form.Item>
-                <Button 
-                  type="primary" 
-                  htmlType="submit" 
-                  className="w-full"
+
+            {/* Right side: Form */}
+            <div className="p-8 w-full md:w-1/2 flex flex-col justify-center items-center  h-full">
+              <h1 className="text-3xl font-bold text-center my-10">
+                Welcome Back!{" "}
+              </h1>
+              <div className="mb-6">
+                <Button
+                  type="default"
+                  icon={<GoogleOutlined />}
+                  className="mb-3  bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-300 p-6"
+                  onClick={handleGoogleSignIn}
                 >
-                  Log in
+                  Sign up with Google
                 </Button>
-                <div className="mt-3 text-center">
-                  Not a member? <Link className="text-blue-500 hover:underline" to="/signup">Register now!</Link>
-                </div>
-              </Form.Item>
-            </Form>
+              </div>
+
+              <div className="flex items-center justify-center text-sm text-black mb-3 w-full">
+                <hr className="flex-1" />
+                <span className="mx-2">Or</span>
+                <hr className="flex-1" />
+              </div>
+
+              <ReusableForm
+                inputs={loginInputs}
+                onSubmit={handleLogin}
+                butttonTxt="Login"
+              />
+
+              <div className="mt-3 text-center">
+                Not a member?{" "}
+                <Link className="text-blue-500 hover:underline" to="/signup">
+                  Register now!
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       )}
