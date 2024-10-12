@@ -21,7 +21,7 @@ import {
 } from "../Constants/UserConstants";
 import { auth, googleProvider } from "../Config/firebase";
 import { signInWithPopup } from "firebase/auth";
-const backendUrl = "https://campuslink.onrender.com";
+const backendUrl = "https://campus-link-hbro.onrender.com";
 
 // Login
 export const LoginUser = (email, password) => async (dispatch) => {
