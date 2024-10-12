@@ -1,2 +1,6 @@
+<<<<<<< HEAD
 ./node_modules
+=======
+/node_modules
+>>>>>>> 49a1d263447414d34756df1759a8607f219a95bc
 .gitignore
