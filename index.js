@@ -13,7 +13,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // CORS Configuration
-
 const allowedOrigins = process.env.FRONTEND_URL.split(','); // Split the comma-separated list
 
 app.use(cors({
