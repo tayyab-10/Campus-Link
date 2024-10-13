@@ -1,5 +1,5 @@
 import React from "react";
-import Sidebar from "./Sidebar.js";
+import Sidebar from "../User/Sidebar.js";
 import { Link } from "react-router-dom";
 import { Doughnut, Line,Bar} from "react-chartjs-2";
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, ArcElement, BarElement, Tooltip, Legend } from 'chart.js';
