@@ -9,18 +9,18 @@ const crypto = require("crypto");
 //Register a user:
 exports.registerUser = catchAsyncError(async (req, res, next) => {
   const { name, email, password, university } = req.body;
-  
+
   const user = await User.create({
     name,
     email,
     password,
     university,
     avatar: {
-      public_id: "this is my public_id",
-      url: "url",
+      public_id: req.filesUpload[0].public_id,
+      url: req.filesUpload[0].url,
     },
   });
-
+  await user.save();
   sendToken(user, 201, res);
 });
 
@@ -54,9 +54,9 @@ exports.loginuser = catchAsyncError(async (req, res, next) => {
 
 // SignIn Using Google
 
-exports.signInUsingGoogle = (async (req, res, next) => {
+exports.signInUsingGoogle = async (req, res, next) => {
   console.log(req.body);
-  const { email, name, password, photoUrl } = req.body;
+  const { email, name, password,photoUrl } = req.body;
   // Check if email and password are provided
   if (!email || !password) {
     return next(new ErrorHandler("Please Enter Email & Password", 400));
@@ -72,13 +72,13 @@ exports.signInUsingGoogle = (async (req, res, next) => {
       password,
       university: "University of Engineering and Technology, Lahore",
       avatar: {
-        public_id: "this is my public_id",
-        url: photoUrl,
+        public_id: "public id",
+        url: photoUrl
       },
     });
   }
   sendToken(user, 200, res);
-});
+};
 
 //logout User
 exports.logout = catchAsyncError(async (req, res, next) => {
@@ -164,4 +164,15 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
   await user.save();
 
   sendToken(user, 200, res);
+});
+
+// Fetch All Users
+
+exports.getAllUsers = catchAsyncError(async (req, res, next) => {
+  const users = await User.find();
+
+  res.status(200).json({
+    success: true,
+    users,
+  });
 });

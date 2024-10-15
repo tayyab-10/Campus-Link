@@ -3,6 +3,7 @@ const express = require("express");
 const errorMiddleware = require("./Middleware/Error");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const fileUpload = require("express-fileupload");
 
 connectToMongo();
 
@@ -19,6 +20,12 @@ app.get("/", (req, res) => {
 // CORS Configuration
 const allowedOrigins = process.env.FRONTEND_URL.split(","); // Split the comma-separated list
 
+app.use(
+  fileUpload({
+    useTempFiles: true, // Required for Cloudinary
+    tempFileDir: "/tmp/", // Temporary directory to store files before uploading to Cloudinary
+  })
+);
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -38,10 +45,11 @@ app.use(
 );
 
 app.use(errorMiddleware);
-
 //Available Routes
 
 app.use("/api/auth", require("./Routes/UserRoute"));
+app.use("/api/societies", require("./Routes/SocietyRoute"));
+app.use("/api/events", require("./Routes/EventRoute"));
 
 app.listen(port, () => {
   console.log(`Server is listening at http://localhost:${port}`);
