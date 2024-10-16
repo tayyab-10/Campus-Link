@@ -9,6 +9,10 @@ const crypto = require("crypto");
 //Register a user:
 exports.registerUser = catchAsyncError(async (req, res, next) => {
   const { name, email, password, university } = req.body;
+  const foundUser = await User.findOne({ email });
+  if (foundUser) {
+    return res.status(400).json({ message: "User with this email already exists" });
+  }
   const user = await User.create({
     name,
     email,
@@ -45,7 +49,8 @@ exports.loginuser = catchAsyncError(async (req, res, next) => {
   const isPasswordMatched = await bcrypt.compare(password, user.password);
 
   if (!isPasswordMatched) {
-    return next(new ErrorHandler("Invalid Email & Password", 401));
+    return next(new ErrorHandler("Invalid Email & Password", 401))
+    // return res.status(401).json({ message: "Invalid Email & Password" });
   }
 
   // Get JWT token
