@@ -9,17 +9,17 @@ const crypto = require("crypto");
 //Register a user:
 exports.registerUser = catchAsyncError(async (req, res, next) => {
   const { name, email, password, university } = req.body;
-
   const user = await User.create({
     name,
     email,
     password,
     university,
     avatar: {
-      public_id: req.filesUpload[0].public_id,
-      url: req.filesUpload[0].url,
+      public_id: req.filesUploaded[0].public_id,
+      url: req.filesUploaded[0].url,
     },
   });
+
   await user.save();
   sendToken(user, 201, res);
 });
@@ -56,7 +56,7 @@ exports.loginuser = catchAsyncError(async (req, res, next) => {
 
 exports.signInUsingGoogle = async (req, res, next) => {
   console.log(req.body);
-  const { email, name, password,photoUrl } = req.body;
+  const { email, name, password, photoUrl } = req.body;
   // Check if email and password are provided
   if (!email || !password) {
     return next(new ErrorHandler("Please Enter Email & Password", 400));
@@ -73,7 +73,7 @@ exports.signInUsingGoogle = async (req, res, next) => {
       university: "University of Engineering and Technology, Lahore",
       avatar: {
         public_id: "public id",
-        url: photoUrl
+        url: photoUrl,
       },
     });
   }
