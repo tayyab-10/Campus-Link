@@ -5,12 +5,13 @@ import Signup from "./Components/User/Signup";
 import Home from "./Components/Layout/Home";
 import ForgotPassword from "./Components/User/ForgotPassword";
 import ResetPassword from "./Components/User/ResetPassword";
+import UserProfile from "./Components/User/UserProfile";
 function App() {
   return (
 
     <Router>
       <Routes>
-        <Route path='/' element={<Home />} />
+        <Route path='/' element={<UserProfile />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/forgotpassword' element={<ForgotPassword />} />
