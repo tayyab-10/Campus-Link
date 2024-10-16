@@ -8,7 +8,7 @@ import { useState } from "react";
 import { Controller } from "react-hook-form";
 const { Option } = Select;
 
-const ReusableInput = ({ input, register, control, inputPadding }) => {
+const ReusableInput = ({ input, register, control, inputPadding, errors }) => {
   const [imageUrl, setImageUrl] = useState(null); // State to handle preview
 
   const { type, name, placeholder, value } = input;
@@ -135,13 +135,19 @@ const ReusableInput = ({ input, register, control, inputPadding }) => {
     <Controller
       name={name}
       control={control}
-      render={({ field }) =>
-        renderInput(
-          input,
-          field,
-          `min-w-full mb-4 p-4 rounded-md  text-lg ${inputPadding}`
-        )
-      }
+      render={({ field }) => (
+        <Form.Item
+          name={name}
+          validateStatus={errors[name] ? "error" : ""}
+          help={errors[name]?.message}
+        >
+          {renderInput(
+            input,
+            field,
+            `min-w-full mb-2 p-3 rounded-md text-lg ${inputPadding}`
+          )}
+        </Form.Item>
+      )}
     />
   );
 };

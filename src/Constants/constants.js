@@ -12,6 +12,7 @@ export const loginInputs = [
     placeholder: "Enter Email",
     Icon: MailOutlined,
     label: "Email",
+    require: true,
   },
   {
     name: "password",
@@ -19,6 +20,7 @@ export const loginInputs = [
     placeholder: "Enter Password",
     Icon: LockOutlined,
     label: "Password",
+    require: true,
   },
 ];
 
@@ -36,6 +38,7 @@ export const registerInputs = [
     placeholder: "Enter Name",
     Icon: UserOutlined,
     label: "Name",
+    require: true,
   },
   {
     name: "email",
@@ -43,6 +46,7 @@ export const registerInputs = [
     placeholder: "Enter Email",
     Icon: MailOutlined,
     label: "Email",
+    require: true,
   },
   {
     name: "password",
@@ -50,6 +54,7 @@ export const registerInputs = [
     placeholder: "Enter Password",
     Icon: LockOutlined,
     label: "Password",
+    require: true,
   },
   {
     name: "confirmPassword",
@@ -57,6 +62,7 @@ export const registerInputs = [
     placeholder: "Enter Confirm Password",
     Icon: LockOutlined,
     label: "Confirm Password",
+    require: true,
   },
   {
     name: "university",
@@ -64,6 +70,6 @@ export const registerInputs = [
     placeholder: "Enter University",
     Icon: UserOutlined,
     label: "University",
+    require: true,
   },
-
 ];

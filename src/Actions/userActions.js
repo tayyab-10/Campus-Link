@@ -21,7 +21,8 @@ import {
 } from "../Constants/UserConstants";
 import { auth, googleProvider } from "../Config/firebase";
 import { signInWithPopup } from "firebase/auth";
-const backendUrl = "https://campus-link-hbro.onrender.com";
+const backendUrl = "http://localhost:4001";
+// const backendUrl = "https://campus-link-hbro.onrender.com";
 
 // Login
 export const LoginUser = (email, password) => async (dispatch) => {
@@ -38,10 +39,9 @@ export const LoginUser = (email, password) => async (dispatch) => {
       { email, password },
       config
     );
-
     dispatch({ type: LOGIN_SUCCESS, payload: data.user }); //becasue there is a token in the response
   } catch (error) {
-    dispatch({ type: LOGIN_FAIL, payload: error.response.data.message });
+    dispatch({ type: LOGIN_FAIL, payload: error.response.data.error });
   }
 };
 

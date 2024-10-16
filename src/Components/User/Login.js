@@ -14,7 +14,7 @@ import {
 } from "../../Actions/userActions";
 import Loader from "../Loader/Loader";
 import { GoogleOutlined } from "@ant-design/icons";
-import { Button } from "antd";
+import { Button, message } from "antd";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -27,13 +27,14 @@ const Login = () => {
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      console.log(error);
+      message["error"](error);
       dispatch(clearError());
     }
 
     if (isAuthenticated) {
       dispatch(LoadUser());
-      alert.success("Login Successfully");
+      message["success"]("Login Successfully");
       navigate("/account");
     }
   }, [dispatch, error, alert, navigate, isAuthenticated]);
@@ -44,15 +45,23 @@ const Login = () => {
   const handleGoogleSignIn = () => {
     dispatch(googleSignIn());
   };
+
+  const extraInputs = () => {
+    return (
+      <>
+        <Link to="/forgotpassword">Forget Password</Link>
+      </>
+    );
+  };
   return (
     <>
       {loading ? (
         <Loader />
       ) : (
         <div className="flex justify-center min-h-screen p-4 bg-gray-100">
-          <div className="flex flex-col md:flex-row items-center bg-white shadow-lg rounded-lg overflow-hidden ">
+          <div className="flex flex-col lg:flex-row items-center bg-white shadow-lg rounded-lg overflow-hidden ">
             {/* Left side: Image */}
-            <div className="hidden md:block w-[80%] h-full bg-blue-600">
+            <div className="hidden sm:w-full sm:block w-[80%] h-full bg-blue-600">
               <img
                 src={loginImage}
                 alt="Login"
@@ -86,6 +95,7 @@ const Login = () => {
                 inputs={loginInputs}
                 onSubmit={handleLogin}
                 butttonTxt="Login"
+                extraInputs={extraInputs()}
               />
 
               <div className="mt-3 text-center">
