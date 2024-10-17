@@ -44,12 +44,12 @@ app.use(
   })
 );
 
-app.use(errorMiddleware);
 //Available Routes
 
 app.use("/api/auth", require("./Routes/UserRoute"));
 app.use("/api/societies", require("./Routes/SocietyRoute"));
 app.use("/api/events", require("./Routes/EventRoute"));
+app.use(errorMiddleware);
 
 app.listen(port, () => {
   console.log(`Server is listening at http://localhost:${port}`);

@@ -1,6 +1,6 @@
 const ErrorHandler=require("../utiles/Errorhandler");
 
-module.exports=(err,req,res,next)=>{
+const errorMiddleware=(err,req,res,next)=>{
     err.statusCode=err.statusCode || 500;
     err.message=err.message || "internal server error"
 
@@ -27,9 +27,11 @@ module.exports=(err,req,res,next)=>{
         const message = `Json Web Token is Expired, Try again `;
         err = new ErrorHandler(message, 400);
     }
-    
+    console.log(err.stack);
     res.status(err.statusCode).json({
         success:false,
         error:err.message,
     })
 }
+
+module.exports=errorMiddleware;
