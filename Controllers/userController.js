@@ -11,7 +11,9 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
   const { name, email, password, university } = req.body;
   const foundUser = await User.findOne({ email });
   if (foundUser) {
-    return res.status(400).json({ message: "User with this email already exists" });
+    return res
+      .status(400)
+      .json({ message: "User with this email already exists" });
   }
   const user = await User.create({
     name,
@@ -49,7 +51,7 @@ exports.loginuser = catchAsyncError(async (req, res, next) => {
   const isPasswordMatched = await bcrypt.compare(password, user.password);
 
   if (!isPasswordMatched) {
-    return next(new ErrorHandler("Invalid Email & Password", 401))
+    return next(new ErrorHandler("Invalid Email & Password", 401));
     // return res.status(401).json({ message: "Invalid Email & Password" });
   }
 
@@ -97,6 +99,15 @@ exports.logout = catchAsyncError(async (req, res, next) => {
   });
 });
 
+//Get user Details
+exports.getUserDetails = catchAsyncError(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
 // Forgot Password
 
 exports.forgotPassword = catchAsyncError(async (req, res, next) => {
@@ -111,7 +122,7 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
 
   await user.save({ validateBeforeSave: false });
 
-  const resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`; // ${req.protocol}: only when you host this website on the server
+  const resetPasswordUrl = `${process.env.FRONTEND_URL?.[0]}/password/reset/${resetToken}`; // ${req.protocol}: only when you host this website on the server
 
   const message = `Your password reset token is :- \n\n ${resetPasswordUrl} \n\nIf you have not requested this email then, please ignore it.`;
 
