@@ -7,10 +7,12 @@ const {
   resetPassword,
   signInUsingGoogle,
   getAllUsers,
-  GetUserDetails
+  GetUserDetails,
+
 } = require("../Controllers/userController");
 const upload = require("../Middleware/multer");
-const {uploadFileToCloudinary}=require("../Middleware/cloudinary")
+const {uploadFileToCloudinary}=require("../Middleware/cloudinary");
+const { isAuthenticatedUser } = require("../Middleware/auth");
 const router = express.Router();
 
 router.route("/register").post(uploadFileToCloudinary("avatar","avatars",false), registerUser);
