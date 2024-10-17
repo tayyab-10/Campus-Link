@@ -7,7 +7,8 @@ const {
   resetPassword,
   signInUsingGoogle,
   getAllUsers,
-  getUserDetails
+  GetUserDetails,
+
 } = require("../Controllers/userController");
 const upload = require("../Middleware/multer");
 const {uploadFileToCloudinary}=require("../Middleware/cloudinary");
@@ -18,7 +19,7 @@ router.route("/register").post(uploadFileToCloudinary("avatar","avatars",false),
 router.route("/signInUsingGoogle").patch(signInUsingGoogle);
 router.route("/login").post(loginuser);
 router.route("/logout").get(logout);
-router.route("/getUserDetails").get(isAuthenticatedUser,getUserDetails);
+router.route("/userdetail").get(GetUserDetails)
 router.route("/fetchUsers").get(getAllUsers);
 router.route("/password/forgot").post(forgotPassword);
 router.route("/password/reset/:token").put(resetPassword);
