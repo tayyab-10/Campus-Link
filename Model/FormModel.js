@@ -22,9 +22,7 @@ const formSchema = new mongoose.Schema({
 },
   societyName:{
     type:String,
-    required: [true, "Please Enter Your Name"],
-    maxLength: [40, "Name cannot exceed 40 characters"],
-    minLength: [4, "Name should have more than 4 characters"],
+
   },
   universityName: { 
     type: String, 
@@ -32,9 +30,6 @@ const formSchema = new mongoose.Schema({
  },
   description:{
     type:String,
-    required:[true,"Please Enter the Description"],
-    maxLength: [200, "Description cannot exceed 200 characters"],
-    minLength: [50, "Description should have more than 50 characters"],
   },
   fields: [fieldSchema],
 });

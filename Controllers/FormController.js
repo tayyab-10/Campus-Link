@@ -4,7 +4,7 @@ const ErrorHandler = require('../utiles/Errorhandler');
 
 
 
-const createForm = catchAsyncErrors(async (req, res) => {
+const createForm = catchAsyncErrors(async (req, res,next) => {
   const { societyType, universityName, fields } = req.body;
 
   if (!societyType || !universityName || !fields.length) {
