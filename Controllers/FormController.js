@@ -1,11 +1,11 @@
-const catchAsyncErrors = require("../Middleware/catchAsyncErrors");
-const Form = require("../Model/FormModel");
-const ErrorHandler = require("../utiles/Errorhandler");
+const catchAsyncErrors = require('../Middleware/catchAsyncErrors');
+const Form = require('../Model/FormModel'); 
+const ErrorHandler = require('../utiles/Errorhandler');
 
-exports.createForm = async (req, res) => {
+// Create a form
+exports.createForm = catchAsyncErrors(async (req, res, next) => {
   try {
-    const { societyType, societyName, universityName, description, fields } =
-      req.body;
+    const { societyType, societyName, universityName, description, fields } = req.body;
 
     const form = new Form({ 
       societyType,
@@ -22,15 +22,16 @@ exports.createForm = async (req, res) => {
       formId: savedForm._id,
     });
   } catch (error) {
-    res.status(400).json({ message: "Failed to create form", error });
+    return next(new ErrorHandler("Failed to create form", 400));
   }
-};
+});
 
-exports.getFormbyid = catchAsyncErrors(async (req, res) => {
+// Get form by ID
+exports.getFormById = catchAsyncErrors(async (req, res, next) => {
   const form = await Form.findById(req.params.id);
 
   if (!form) {
-    return next(new ErrorHandler("Form with this id Does not exist", 404));
+    return next(new ErrorHandler("Form with this ID does not exist", 404));
   }
 
   res.status(200).json({
@@ -39,18 +40,6 @@ exports.getFormbyid = catchAsyncErrors(async (req, res) => {
   });
 });
 
-exports.getForms = catchAsyncErrors(async (req, res) => {
-  const forms = await Form.find();
-  res.json(forms);
-});
 
-exports.getFormBySocietyType = catchAsyncErrors(async (req, res) => {
-  const { societyType } = req.params;
 
-  const form = await Form.findOne({ societyType });
-  if (!form) {
-    return res.status(404).json({ msg: "Form not found" });
-  }
-  res.json(form);
-});
 
