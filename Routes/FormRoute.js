@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { createForm, getForms, getFormBySocietyType } = require('../Controllers/FormController');
+const {createForm, getFormById } = require('../Controllers/FormController');
 
 
 
 router.post('/createform', createForm);
 
-router.get('/getform', getForms);
+router.get('/forms/:id', getFormById);
 
-router.get('/:societyType', getFormBySocietyType);
 
 module.exports = router;
