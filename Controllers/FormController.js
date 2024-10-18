@@ -4,19 +4,43 @@ const ErrorHandler = require('../utiles/Errorhandler');
 
 
 
-const createForm = catchAsyncErrors(async (req, res,next) => {
-  const { societyType, universityName, fields } = req.body;
+exports.createForm = async (req, res) => {
+  try {
+    const { societyType, societyName, universityName, description, fields } = req.body;
 
-  if (!societyType || !universityName || !fields.length) {
-    return next(new ErrorHandler("All Fields are required", 400));
+    const form = new FormTemplate({
+      societyType,
+      societyName,
+      universityName,
+      description,
+      fields,
+    });
+
+    const savedForm = await form.save();
+
+    res.status(201).json({
+        success:true,
+       formId: savedForm._id,
+      });
+  } catch (error) {
+    res.status(400).json({ message: "Failed to create form", error });
+  }
+};
+
+export const getFormbyid = catchAsyncErrors(async (req, res) => {
+  const form=await Form.findById(req.params.id)
+
+  if(!form){
+    return next(new ErrorHandler("Form with this id Does not exist",404)
   }
 
-    const form = new Form({ societyType, universityName, fields });
-    await form.save();
-    res.status(201).json({ msg: 'Form created successfully', form });
-  });
+   res.status(200).json({
+      success: true,
+      form,
+    });
+}); 
 
-const getForms = catchAsyncErrors(async (req, res) => {
+export const getForms = catchAsyncErrors(async (req, res) => {
 
     const forms = await Form.find();
     res.json(forms);
@@ -32,4 +56,4 @@ const getFormBySocietyType = catchAsyncErrors(async (req, res) => {
     res.json(form);
   });
 
-module.exports = { createForm, getForms, getFormBySocietyType };
+module.exports = {getForms, getFormBySocietyType };
