@@ -22,7 +22,6 @@ const formSchema = new mongoose.Schema({
 },
   societyName:{
     type:String,
-
   },
   universityName: { 
     type: String, 
@@ -30,6 +29,25 @@ const formSchema = new mongoose.Schema({
  },
   description:{
     type:String,
+  },
+  societybanner:{
+    public_id: {
+      type: String,
+      required: true,
+    },
+    url: {
+      type: String,
+      required: true,
+    }
+  },
+  socialLinks: {
+    type: [String], // Array of strings to hold multiple social media links
+    validate: {
+      validator: function (v) {
+        return v.every(link => /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i.test(link)); // Validate URLs
+      },
+      message: props => `${props.value} is not a valid URL!`,
+    },
   },
   fields: [fieldSchema],
 });
