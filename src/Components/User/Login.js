@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { loginInputs } from "../../Constants/constants";
+import { loginInputs } from "../../Constants/Formconstants";
 import ReusableForm from "../ReusableForm/ReusableForm";
 import { Link, useNavigate } from "react-router-dom";
 import { useAlert } from "react-alert";
@@ -32,9 +32,9 @@ const Login = () => {
     }
 
     if (isAuthenticated) {
-      dispatch(LoadUser());
+      // dispatch(LoadUser());
       message["success"]("Login Successfully");
-      navigate("/account");
+      navigate("/userprofile");
     }
   }, [dispatch, error, alert, navigate, isAuthenticated]);
 

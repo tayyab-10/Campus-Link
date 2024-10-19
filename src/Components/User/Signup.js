@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { registerInputs } from "../../Constants/constants";
+import { registerInputs } from "../../Constants/Formconstants";
 import ReusableForm from "../ReusableForm/ReusableForm";
 import { Link, useNavigate } from "react-router-dom";
 import { useAlert } from "react-alert";
@@ -33,7 +33,7 @@ const Signup = () => {
     if (isAuthenticated) {
       dispatch(LoadUser());
       alert.success("Signup Successfully");
-      navigate("/account");
+      navigate("/userprofile");
     }
   }, [dispatch, error, alert, navigate, isAuthenticated]);
 
