@@ -4,7 +4,6 @@ const ErrorHandler = require('../utiles/Errorhandler');
 
 // Create a form
 exports.createForm = catchAsyncErrors(async (req, res, next) => {
-  try {
     const { societyType, societyName, universityName,societybanner,socialLinks,description, fields } = req.body;
 
     const form = new Form({ 
@@ -23,10 +22,7 @@ exports.createForm = catchAsyncErrors(async (req, res, next) => {
       success: true,
       formId: savedForm._id,
     });
-  } catch (error) {
-    return next(new ErrorHandler("Failed to create form", 400));
-  }
-});
+  });
 
 // Get form by ID
 exports.getFormById = catchAsyncErrors(async (req, res, next) => {
