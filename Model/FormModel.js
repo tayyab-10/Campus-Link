@@ -33,7 +33,6 @@ const formSchema = new mongoose.Schema({
   societybanner:{
     public_id: {
       type: String,
-      required: true,
     },
     url: {
       type: String,
