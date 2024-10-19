@@ -5,13 +5,15 @@ const ErrorHandler = require('../utiles/Errorhandler');
 // Create a form
 exports.createForm = catchAsyncErrors(async (req, res, next) => {
   try {
-    const { societyType, societyName, universityName, description, fields } = req.body;
+    const { societyType, societyName, universityName,societybanner,socialLinks,description, fields } = req.body;
 
     const form = new Form({ 
       societyType,
       societyName,
       universityName,
       description,
+      societybanner,
+      socialLinks,
       fields,
     });
 
