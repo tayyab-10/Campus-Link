@@ -7,13 +7,17 @@ import ForgotPassword from "./Components/User/ForgotPassword";
 import ResetPassword from "./Components/User/ResetPassword";
 import UserProfile from "./Components/User/UserProfile";
 import Dashboard from "./Components/Layout/Dashboard";
+import InductionForm from "./Components/Societies/InductionForm";
+import FieldBuilder from "./Components/Societies/InductionForm";
+import FormComponent from "./Components/Societies/FormComponent";
 function App() {
   return (
 
     <Router>
       <Routes>
-        <Route path='/' element={<Dashboard />} />
-        <Route path='/user/Profile' element={UserProfile}/>
+        <Route path='/' element={<InductionForm/>} />
+        <Route path="/form/:formId" element={<FormComponent />} />
+        <Route path='/userprofile' element={<UserProfile/>}/>
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/forgotpassword' element={<ForgotPassword />} />
