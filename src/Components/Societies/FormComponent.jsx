@@ -10,7 +10,6 @@ const FormComponent = () => {
   const alert = useAlert();
   const {formId}=useParams();
 
-  // Get form details from Redux state
   const formDetails = useSelector((state) => state.GetForm);
   const { loading, error, form } = formDetails;
 
@@ -19,10 +18,10 @@ const FormComponent = () => {
       alert.error(error);
       dispatch(clearError());
     }
-    // Fetch the form data when the component loads
+  
     dispatch(fetchFormById(formId));
   }, [dispatch, formId, error]);
-// Log the form data
+
 useEffect(() => {
   if (form) {
     console.log("Form data:", form);  // Check if socialLinks exists here
