@@ -1,5 +1,16 @@
 const mongoose = require("mongoose");
 
+const socialMediaSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  url: {
+    type: String,
+    required: true,
+  },
+});
+
 const SocietySchema = new mongoose.Schema({
   founder: {
     type: mongoose.Schema.Types.ObjectId,
@@ -34,6 +45,7 @@ const SocietySchema = new mongoose.Schema({
     default: "",
   },
 
+  social_links: [socialMediaSchema],
   createdAt: {
     type: Date,
     default: Date.now,
