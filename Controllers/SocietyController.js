@@ -20,7 +20,7 @@ exports.createSociety = async (req, res) => {
       email,
       description,
       picture: req.filesUploaded[0].url,
-      social_links:parsedSocialLinks,
+      social_links: parsedSocialLinks,
     });
 
     await newSociety.save();
@@ -97,7 +97,13 @@ exports.deleteSociety = async (req, res) => {
 exports.getAllSocieties = async (req, res) => {
   try {
     const societies = await Society.find().populate("founder");
-    res.status(200).json(societies);
+    res
+      .status(200)
+      .json({
+        status: "success",
+        data: societies,
+        message: "All societies fetched successfully",
+      });
   } catch (error) {
     res.status(500).json({ message: "Error fetching societies", error });
   }
