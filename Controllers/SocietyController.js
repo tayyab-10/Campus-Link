@@ -101,7 +101,7 @@ exports.getAllSocieties = async (req, res) => {
       .status(200)
       .json({
         status: "success",
-        data: societies,
+        societies,
         message: "All societies fetched successfully",
       });
   } catch (error) {
