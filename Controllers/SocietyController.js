@@ -7,6 +7,7 @@ exports.createSociety = async (req, res) => {
   const userID = req.user._id;
   try {
     const { name, email, description, social_links } = req.body;
+    const parsedSocialLinks = JSON.parse(social_links);
     const foundSociety = await Society.findOne({ email });
     if (foundSociety) {
       return res
@@ -19,7 +20,7 @@ exports.createSociety = async (req, res) => {
       email,
       description,
       picture: req.filesUploaded[0].url,
-      social_links,
+      social_links:parsedSocialLinks,
     });
 
     await newSociety.save();
