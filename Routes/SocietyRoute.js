@@ -13,7 +13,7 @@ const {
 const { isAuthenticatedUser } = require("../Middleware/auth");
 const { uploadFileToCloudinary } = require("../Middleware/cloudinary");
 
-router.route("/createSociety").post( uploadFileToCloudinary("picture","societies",false),createSociety);
+router.route("/createSociety").post(isAuthenticatedUser,uploadFileToCloudinary("picture","societies",false),createSociety);
 router.route("/updateSociety/:societyId").patch(isAuthenticatedUser, uploadFileToCloudinary("picture","societies",false),updateSociety);
 router.route("/deleteSociety/:societyId").delete(isAuthenticatedUser, deleteSociety);
 router.route("/getAllSocieties").get( getAllSocieties);
