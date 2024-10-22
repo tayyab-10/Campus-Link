@@ -2,13 +2,15 @@ import { legacy_createStore as createStore, combineReducers, applyMiddleware, co
 import {thunk} from "redux-thunk"; // Corrected import
 import { forgotPasswordReducer, userReducer } from "../Reducers/userReducer";
 import { formreducer, GetformReducer } from "../Reducers/FormReducers";
+import { SocietyReducer } from "../Reducers/SocietyReducer";
 
 // Combine all your reducers
 const reducer = combineReducers({
     User: userReducer,
     forgotpassword: forgotPasswordReducer,
     Inductionform:formreducer,
-    GetForm:GetformReducer
+    GetForm:GetformReducer,
+    GetSocieties:SocietyReducer
 });
 
 // Middleware array, with thunk middleware

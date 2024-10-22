@@ -5,7 +5,7 @@ const initialState = {
     loading: false,
     form:{}
 }
-export const formreducer=(state={initialState},action)=>{
+export const formreducer=(state=initialState,action)=>{
     switch (action.type) {
         case CREATE_FORM_REQUEST:
             return {
